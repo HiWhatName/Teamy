@@ -1,6 +1,6 @@
 package me.hiwhatname.bot.commands;
 
-import me.hiwhatname.bot.WarfareBot;
+import me.hiwhatname.bot.Teamy;
 import me.hiwhatname.bot.team.Team;
 import me.hiwhatname.bot.team.TeamManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -17,7 +17,7 @@ public class TeamsCommand extends ListenerAdapter {
         if(!(e.getName().equals("teams"))) return;
         StringBuilder stb = new StringBuilder();
         stb.append("List of all Teams -> ");
-        TeamManager tm = WarfareBot.getTeamManagerForGuild(e.getGuild());
+        TeamManager tm = Teamy.getTeamManagerForGuild(e.getGuild());
         for(Team team : tm.getTeams()){
             stb.append("> " + team.getTeamName() + "[" + team.getMembers().size() + "/" + tm.getMaxMembersPerTeam() + "]");
         }

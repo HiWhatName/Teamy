@@ -1,6 +1,6 @@
 package me.hiwhatname.bot.team;
 
-import me.hiwhatname.bot.WarfareBot;
+import me.hiwhatname.bot.Teamy;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -43,7 +43,7 @@ public class TeamManager extends ListenerAdapter {
             //Make sure the role is part of a 'team role'
             if(role.getName().startsWith(spl[0]) && role.getName().endsWith(spl[1])){
                 String teamName = role.getName().replace(spl[0], "").replace(spl[1], "");
-                WarfareBot.getLogger().info("[" + g.getName() + "] Found team: '" + teamName + " -> Role: " + role.getName());
+                Teamy.getLogger().info("[" + g.getName() + "] Found team: '" + teamName + " -> Role: " + role.getName());
                 createTeam(teamName, role);
             }
         }
@@ -63,7 +63,7 @@ public class TeamManager extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent e) {
         if (e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId)) return;
         e.retrieveMessage().queue(userMessage -> {
-            WarfareBot.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has reacted to the message.");
+            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has reacted to the message.");
             for(Team t : teams){
                 if(t.getMembers().size() < maxMembersPerTeam){
                     t.addPlayer(e.getMember());
@@ -80,7 +80,7 @@ public class TeamManager extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent e) {
         if (e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId)) return;
         e.retrieveMessage().queue(userMessage -> {
-            WarfareBot.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has removed his reaction from the message.");
+            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has removed his reaction from the message.");
             //Remove from team
         });
     }
@@ -104,7 +104,7 @@ public class TeamManager extends ListenerAdapter {
      */
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent e) { // TODO: same problem as above
-        WarfareBot.getLogger().info("If this message worked, great \n\n\n\n\n\n .");
+        Teamy.getLogger().info("If this message worked, great \n\n\n\n\n\n .");
         for(Team team : teams){
             if(team.getMembers().contains(e.getMember()) // If the member has joined any team proceed
                     && !(e.getMember().getRoles().contains(team.getTeamRole()))){ // If he doesn't contain the teamRole anymore, we can assume it got removed.
@@ -132,7 +132,7 @@ public class TeamManager extends ListenerAdapter {
                     .setMentionable(true)
                     .setPermissions(Permission.EMPTY_PERMISSIONS)
                     .complete();
-            WarfareBot.getLogger().info("[" + guild.getName() + "] created the role: " + role.getName());
+            Teamy.getLogger().info("[" + guild.getName() + "] created the role: " + role.getName());
         } else {
             role = matchingRoles.get(0);
         }
@@ -142,12 +142,12 @@ public class TeamManager extends ListenerAdapter {
     // DATA bloat
     public Team createTeam(String teamName, Color teamColor) {
         Team team = new Team(teamName, guild, generateTeamRole(teamName, teamColor));
-        WarfareBot.getLogger().info("[" + guild.getName() + "] created/restored  team: '" + team.getTeamName() + "'");
+        Teamy.getLogger().info("[" + guild.getName() + "] created/restored  team: '" + team.getTeamName() + "'");
         return team;
     }
     public Team createTeam(String teamName, Role teamRole) {
         Team team = new Team(teamName, guild, teamRole);
-        WarfareBot.getLogger().info("[" + guild.getName() + "] created/restored team: '" + team.getTeamName() + "'");
+        Teamy.getLogger().info("[" + guild.getName() + "] created/restored team: '" + team.getTeamName() + "'");
         return team;
     }
 

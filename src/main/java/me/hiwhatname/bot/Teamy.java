@@ -27,14 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class WarfareBot extends ListenerAdapter {
+public class Teamy extends ListenerAdapter {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger( WarfareBot.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger( Teamy.class);
 
     private ShardManager shardManager;
     private static Dotenv botConfig;
     private static final List<TeamManager> teamManagerList = new ArrayList<>();
-    private static WarfareBot bot;
+    private static Teamy bot;
 
     /**
      * Silly JDA5 bot made for a competition.
@@ -43,7 +43,7 @@ public class WarfareBot extends ListenerAdapter {
      * @throws LoginException
      * @author HiWhatName
      */
-    public WarfareBot() throws LoginException {
+    public Teamy() throws LoginException {
         LOGGER.info("Loading .env file.");
         botConfig = Dotenv.configure().load();
         DefaultShardManagerBuilder builder;
@@ -98,7 +98,7 @@ public class WarfareBot extends ListenerAdapter {
         long startTime = System.currentTimeMillis();
         LOGGER.info("Starting up the bot, this may take a while....");
         try {
-            bot = new WarfareBot(); // Init
+            bot = new Teamy(); // Init
         } catch (LoginException e) {
             LOGGER.error("ERR: Could not log into the bot.\nAre you specifying the right token?");
             System.exit(0);
@@ -172,7 +172,7 @@ public class WarfareBot extends ListenerAdapter {
         return new TeamManager(g, 1060982539612848169L, "[MW3-%s]", (short) 3); //TODO: RGB, Look at the message above", also
     }
 
-    public static WarfareBot getBot() {
+    public static Teamy getBot() {
         return bot;
     }
 

@@ -9,10 +9,10 @@ version '0.1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-mainClassName = "me.hiwhatname.bot.WarfareBot"
+mainClassName = "me.hiwhatname.bot.teamy"
 
 application {
-    mainClass = 'me.hiwhatname.bot.WarfareBot'
+    mainClass = 'me.hiwhatname.bot.teamy'
 }
 
 dependencies {

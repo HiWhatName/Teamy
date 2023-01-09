@@ -2,7 +2,7 @@ package me.hiwhatname.bot.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.hiwhatname.bot.WarfareBot;
+import me.hiwhatname.bot.Teamy;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,7 +26,7 @@ public class GuildConfig {
 
         if (!JSON.exists() || Files.readString(JSON.toPath()).isEmpty()) {
             try {
-                WarfareBot.getLogger().info("No " + JSON.getName() + " file found, creating one instead.");
+                Teamy.getLogger().info("No " + JSON.getName() + " file found, creating one instead.");
                 Files.write(JSON.toPath(),"{\n  \"guilds\": {}\n}".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             } catch (IOException e) {
                 throw new IOException(JSON.getName() + " could not be created!", e);
