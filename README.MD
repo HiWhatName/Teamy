@@ -3,7 +3,7 @@
 
 **Important notice:** *As of the 8th jan 2023 I(HiWhatName) won't be maintaining this project anymore. If you still choose to use it, be warned as I won't provide any support.*
 
-## features:
+## "Features":
 - Reaction based team system with slash commands. -> Each guild(server) can have their own preferences.
 - Mute annoying screamers.
 - Config file
