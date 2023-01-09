@@ -1,6 +1,5 @@
 # Teamy - A silly bot made for a minecraft competition
-
-Teamy allows servers to manage teams of users in an easy way, whilst providing a lot of features. This was kinda intended to be a way for me(HiWhatName) to learn the JDA-5 framework.
+![main workflow](https://github.com/HiWhatName/Teamy/actions/workflows/gradle.yml/badge.svg) Teamy allows servers to manage teams of users in an easy way, whilst providing a lot of features. This was kinda intended to be a way for me(HiWhatName) to learn the JDA-5 framework.
 
 **Important notice:** *As of the 8th jan 2023 I(HiWhatName) won't be maintaining this project anymore. If you still choose to use it, be warned as I won't provide any support.*
 
