@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'me.hiwhatname'
+version '0.1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+mainClassName = "me.hiwhatname.bot.WarfareBot"
+
+application {
+    mainClass = 'me.hiwhatname.bot.WarfareBot'
+}
+
+dependencies {
+    implementation("ch.qos.logback:logback-classic:1.2.8") //Logback
+    implementation("net.dv8tion:JDA:5.0.0-beta.2") // JDA
+    implementation("io.github.cdimascio:dotenv-java:2.3.1") // Dotenv-java
+    implementation('com.google.code.gson:gson:2.10') // Gson
+
+    //Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    //Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+}
+
+test {
+    useJUnitPlatform()
+}
