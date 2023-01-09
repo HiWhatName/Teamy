@@ -45,10 +45,10 @@ public class Teamy extends ListenerAdapter {
      */
     public Teamy() throws LoginException {
         LOGGER.info("Loading .env file.");
-        botConfig = Dotenv.configure().load();
         DefaultShardManagerBuilder builder;
 
         try { // Get config values
+            botConfig = Dotenv.configure().load();
             builder = DefaultShardManagerBuilder.createDefault(botConfig.get("TOKEN"));
             builder.setStatus(OnlineStatus.valueOf(botConfig.get("STATUS")));
             builder.setActivity(Activity.of(Activity.ActivityType.valueOf(botConfig.get("ACTIVITY_TYPE")), botConfig.get("ACTIVITY")));
