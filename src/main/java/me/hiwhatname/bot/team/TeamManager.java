@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.slf4j.Logger;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ public class TeamManager extends ListenerAdapter {
     private List<Team> teams = new ArrayList<>();
     private String teamRolePattern; // e.G: [MW3-+]
     private short maxMembersPerTeam;
-    private String[] predefinedTeamName = new String[] {"127.0.0.1", "Mecklenburg-Vorpommern", "Luftwaffel", "Buxtehude", "Luftangriff", "Fehlgebu-"}; //TODO: load from config
     private Random random = new Random();
 
     public TeamManager(Guild guild, Long reactMessageID, String teamPattern, short maxMembersPerTeam) {
@@ -39,7 +39,7 @@ public class TeamManager extends ListenerAdapter {
 
         //Load teams from existing roles
         for (Role role : guild.getRoles().subList(0, guild.getRoles().size() - 1)){ //Don't include @everyone
-            String[] spl = teamPattern.split("\\|", 2); // TODO: add to config, and documente '|' symbol
+            String[] spl = teamPattern.split("\\|", 2); // TODO: add documentation for the '|' placeholder
 
             //Make sure the role is part of a 'team role'
             if(role.getName().startsWith(spl[0]) && role.getName().endsWith(spl[1])){
@@ -55,22 +55,19 @@ public class TeamManager extends ListenerAdapter {
         }
     }
 
-
     /**
      * Adds the reacting player to a free team.
      * @param e
      */
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent e) {
-        if (!(e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId))) return; //TODO: it ain't doin that + check which emoji was added.
+        if(!(e.getGuild().getId().equals(guild.getId()))) return;
+
+        Teamy.getLogger().info("\n This message: " + e.getMessageId() + " Config message:" + reactMessageId
+                + "Result: " + (e.getMessageId().equals(reactMessageId)));
         e.retrieveMessage().queue(userMessage -> {
             Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getUser().getName() + " has reacted to the message.");
-            for(Team t : teams){
-                if(t.getMembers().size() < maxMembersPerTeam){
-                    t.addPlayer(e.getMember());
-                    break;
-                }
-            }
+            addMemberToFreeTeam(e.getMember());
         });
     }
 

@@ -53,7 +53,7 @@ public class Teamy extends ListenerAdapter {
             builder.setStatus(OnlineStatus.valueOf(botConfig.get("STATUS")));
             builder.setActivity(Activity.of(Activity.ActivityType.valueOf(botConfig.get("ACTIVITY_TYPE")), botConfig.get("ACTIVITY")));
 
-            LOGGER.info("Enabling Intents, please make sure to enable them in the developer settings. \n For more info visit README.MD");
+            LOGGER.info("Enabling Intents, please make sure to enable them in the developer settings. For more info visit README.MD");
             builder.enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS));
 
             LOGGER.info("Caching user information, this may take a while....");
@@ -123,7 +123,7 @@ public class Teamy extends ListenerAdapter {
                 }
             }
 
-
+            LOGGER.info(((Number) guildConfig.get("reactMessageId")).longValue() + "\n\n"); //TODO: Fix this returning wrong value
             TeamManager tm = new TeamManager(guild, ((Number) guildConfig.get("reactMessageId")).longValue(), (String) guildConfig.get("rolePattern"),
                     ((Number) guildConfig.get("maxMembersPerTeam")).shortValue());
             shardManager.addEventListener(tm);
