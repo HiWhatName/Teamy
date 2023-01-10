@@ -74,7 +74,7 @@ public class Teamy extends ListenerAdapter {
             shardManager = builder.build();
 
         } catch (Exception e) {
-            LOGGER.error("Incorrect .env file parsed, see: .env.example");
+            LOGGER.error("Incorrect or non existent .env file parsed, see: .env.example");
             System.exit(0);
         }
 
@@ -112,21 +112,23 @@ public class Teamy extends ListenerAdapter {
         long startTime = System.currentTimeMillis();
         LOGGER.info("Registering TeamManagers...");
 
-        for (Guild g : shardManager.getGuilds()) {
-            if (GuildConfig.getGuildConfigById(g.getIdLong()) == null) {
+        for (Guild guild : shardManager.getGuilds()) {
+            Map<String, ?> guildConfig = GuildConfig.getGuildConfigById(guild.getIdLong());
+            if (guildConfig == null) {
                 try {
-                    GuildConfig.addGuild(g.getIdLong(), 0L, "[MW3-|]", (short) 3, new String[]
+                    GuildConfig.addGuild(guild.getIdLong(), 0L, "[MW3-|]", (short) 3, new String[]
                             {"Change","Me"}, true);
                 } catch (IOException e) {
-                    getLogger().warn("Guild " + g.getName() + " cloud not be written to guilds.json\n" + e);
+                    getLogger().warn("Guild " + guild.getName() + " cloud not be written to guilds.json\n" + e);
                 }
             }
 
-            Map<String, ?> guildConfig = GuildConfig.getGuildConfigById(g.getIdLong());
-            TeamManager tm = new TeamManager(g, ((Number) guildConfig.get("reactMessageId")).longValue(), (String) guildConfig.get("rolePattern"),
+
+            TeamManager tm = new TeamManager(guild, ((Number) guildConfig.get("reactMessageId")).longValue(), (String) guildConfig.get("rolePattern"),
                     ((Number) guildConfig.get("maxMembersPerTeam")).shortValue());
             shardManager.addEventListener(tm);
-            LOGGER.info("TeamManager started for: " + g.getName());
+
+            LOGGER.info("TeamManager started for: " + guild.getName());
         }
 
         if (!(Boolean.parseBoolean(botConfig.get("REGISTER_GLOBAL")))) {
@@ -161,15 +163,14 @@ public class Teamy extends ListenerAdapter {
         }
 
         Map<String, ?> guild = GuildConfig.getGuildConfigById(g.getIdLong());
-
         TeamManager tm = new TeamManager(
                 g,
                 (long) guild.get("reactMessageId"),
                 (String) guild.get("rolePattern"),
-                (short) guild.get("maxMembersPerTeam")
-        );
+                (short) guild.get("maxMembersPerTeam"));
+                teamManagerList.add(tm);
 
-        return new TeamManager(g, 1060982539612848169L, "[MW3-%s]", (short) 3); //TODO: RGB, Look at the message above", also
+        return tm;
     }
 
     public static Teamy getBot() {

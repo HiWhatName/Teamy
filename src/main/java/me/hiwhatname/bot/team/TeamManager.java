@@ -3,6 +3,7 @@ package me.hiwhatname.bot.team;
 import me.hiwhatname.bot.Teamy;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
@@ -30,8 +31,8 @@ public class TeamManager extends ListenerAdapter {
     private String[] predefinedTeamName = new String[] {"127.0.0.1", "Mecklenburg-Vorpommern", "Luftwaffel", "Buxtehude", "Luftangriff", "Fehlgebu-"}; //TODO: load from config
     private Random random = new Random();
 
-    public TeamManager(Guild g, Long reactMessageID, String teamPattern, short maxMembersPerTeam) {
-        this.guild = g;
+    public TeamManager(Guild guild, Long reactMessageID, String teamPattern, short maxMembersPerTeam) {
+        this.guild = guild;
         this.teamRolePattern = teamPattern;
         this.reactMessageId = reactMessageID;
         this.maxMembersPerTeam = maxMembersPerTeam;
@@ -43,7 +44,7 @@ public class TeamManager extends ListenerAdapter {
             //Make sure the role is part of a 'team role'
             if(role.getName().startsWith(spl[0]) && role.getName().endsWith(spl[1])){
                 String teamName = role.getName().replace(spl[0], "").replace(spl[1], "");
-                Teamy.getLogger().info("[" + g.getName() + "] Found team: '" + teamName + " -> Role: " + role.getName());
+                Teamy.getLogger().info("[" + guild.getName() + "] Found team: '" + teamName + " -> Role: " + role.getName());
                 createTeam(teamName, role);
             }
         }
@@ -61,14 +62,15 @@ public class TeamManager extends ListenerAdapter {
      */
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent e) {
-        if (e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId)) return;
+        if (!(e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId))) return; //TODO: it ain't doin that + check which emoji was added.
         e.retrieveMessage().queue(userMessage -> {
-            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has reacted to the message.");
+            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getUser().getName() + " has reacted to the message.");
             for(Team t : teams){
                 if(t.getMembers().size() < maxMembersPerTeam){
                     t.addPlayer(e.getMember());
+                    break;
                 }
-            } //TODO: implement this!
+            }
         });
     }
 
@@ -80,7 +82,7 @@ public class TeamManager extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent e) {
         if (e.getGuild().getId().equals(guild.getId()) && e.getMessageId().equals(reactMessageId)) return;
         e.retrieveMessage().queue(userMessage -> {
-            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getNickname() + " has removed his reaction from the message.");
+            Teamy.getLogger().info("[" + guild.getName() + "]" + " User: " + e.getMember().getUser().getName() + " has removed his reaction from the message.");
             //Remove from team
         });
     }
@@ -151,6 +153,14 @@ public class TeamManager extends ListenerAdapter {
         return team;
     }
 
+    public void addMemberToFreeTeam(Member m){
+        for (Team t : teams){
+            if(t.getMembers().size() < maxMembersPerTeam){
+                t.addPlayer(m);
+                break;
+            }
+        }
+    }
     public Guild getGuild() {
         return guild;
     }
