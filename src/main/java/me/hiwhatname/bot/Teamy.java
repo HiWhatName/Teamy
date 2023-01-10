@@ -123,8 +123,8 @@ public class Teamy extends ListenerAdapter {
             }
 
             Map<String, ?> guildConfig = GuildConfig.getGuildConfigById(g.getIdLong());
-            TeamManager tm = new TeamManager(g, (long) guildConfig.get("reactMessageId"), (String) guildConfig.get("rolePattern"),
-                    (short) guildConfig.get("maxMembersPerTeam"));
+            TeamManager tm = new TeamManager(g, ((Number) guildConfig.get("reactMessageId")).longValue(), (String) guildConfig.get("rolePattern"),
+                    ((Number) guildConfig.get("maxMembersPerTeam")).shortValue());
             shardManager.addEventListener(tm);
             LOGGER.info("TeamManager started for: " + g.getName());
         }
