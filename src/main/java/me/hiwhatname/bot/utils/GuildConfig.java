@@ -24,10 +24,10 @@ public class GuildConfig {
             .create();
 
     /**
-     * @author RGB__Toaster <- Blame him not me xp
+     * @author HiWhatName, RGB__Toaster <- Blame him not me xp
      * @throws IOException
      */
-    public static void loadGuilds() throws IOException {
+    public static void loadGuilds() throws IOException { //TODO: Fix incorrect json syntax
 
         if (!JSON.exists() || Files.readString(JSON.toPath()).isEmpty()) {
             try {
