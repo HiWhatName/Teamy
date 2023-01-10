@@ -113,16 +113,16 @@ public class Teamy extends ListenerAdapter {
         LOGGER.info("Registering TeamManagers...");
 
         for (Guild g : shardManager.getGuilds()) {
-            if (GuildConfig.getConfigByGuildId(g.getIdLong()) == null) {
+            if (GuildConfig.getGuildConfigById(g.getIdLong()) == null) {
                 try {
                     GuildConfig.addGuild(g.getIdLong(), 0L, "[MW3-|]", (short) 3, new String[]
-                            {"127.0.0.1", "Mecklenburg-Vorpommern", "Luftwaffel", "Buxtehude", "Luftangriff", "Fehlgebu-"}, true);
+                            {"Change","Me"}, true);
                 } catch (IOException e) {
                     getLogger().warn("Guild " + g.getName() + " cloud not be written to guilds.json\n" + e);
                 }
             }
 
-            Map<String, ?> guildConfig = GuildConfig.getConfigByGuildId(g.getIdLong());
+            Map<String, ?> guildConfig = GuildConfig.getGuildConfigById(g.getIdLong());
             TeamManager tm = new TeamManager(g, (long) guildConfig.get("reactMessageId"), (String) guildConfig.get("rolePattern"),
                     (short) guildConfig.get("maxMembersPerTeam"));
             shardManager.addEventListener(tm);
@@ -160,7 +160,7 @@ public class Teamy extends ListenerAdapter {
             }
         }
 
-        Map<String, ?> guild = GuildConfig.getConfigByGuildId(g.getIdLong());
+        Map<String, ?> guild = GuildConfig.getGuildConfigById(g.getIdLong());
 
         TeamManager tm = new TeamManager(
                 g,

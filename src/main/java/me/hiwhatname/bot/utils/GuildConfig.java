@@ -3,6 +3,7 @@ package me.hiwhatname.bot.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.hiwhatname.bot.Teamy;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +17,11 @@ public class GuildConfig {
 
     private final static File JSON = new File("guilds.json");
     private static Map<String, Map<String, ?>> guilds;
-    private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private final static Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .disableJdkUnsafe()
+            .serializeNulls()
+            .create();
 
     /**
      * @author RGB__Toaster <- Blame him not me xp
@@ -35,8 +40,11 @@ public class GuildConfig {
         guilds = (Map<String, Map<String, ?>>) GSON.fromJson(new FileReader(JSON), Map.class).get("guilds");
     }
 
-    public static Map<String, ?> getConfigByGuildId(long guildId) {
+    public static Map<String, ?> getGuildConfigById(long guildId) {
         return guilds.get(String.valueOf(guildId));
+    }
+    public static Map<String, ?> getGuildConfigByGuild(Guild guild) {
+        return guilds.get(String.valueOf(guild.getId()));
     }
 
     public static void addGuild(long guildId, long reactMessageId, String rolePattern, short maxMembersPerTeam, String[] predefinedTeamName, boolean allowNameChange) throws IOException {
